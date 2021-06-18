@@ -3,18 +3,34 @@
     <ion-title>
       Blank
     </ion-title>
+    <ion-buttons end>
+      <button (click)="addItem()">+ADD ITEM</button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item-sliding #slidingItem *ngFor="let task of tasks">
+      <ion-item [ngClass]="{taskDone: task.status === 'done'}">
+        {{task.title}}
+        <ion-icon *ngIf="task.status === 'done';else notDone" name="checkmark-circle"></ion-icon>
+        <ng-template #notDone><ion-icon name="checkmark-circle-outline"></ion-icon></ng-template>
+      </ion-item>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+      <ion-item-options side="end" (ionSwipe)="removeTask(slidingItem,task)">
+        <ion-button (click)="markAsDone(slidingItem, task)" color="secondary">
+          <ion-icon name="checkmark"></ion-icon>
+        </ion-button>
+        <ion-button (click)="removeTask(slidingItem, task)" color="danger">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>
+<ion-footer>
+  <ion-toolbar color="medium">
+      <ion-title (click)="logout()">Log out</ion-title>
+  </ion-toolbar>
+</ion-footer>
